@@ -87,6 +87,7 @@ if(isset($_POST['register'])){
   <script src="./package/dist/sweetalert2.js"></script>
   <?php echo$sweetAlertConfig; ?>
   <script>
+    
   // Function to validate individual fields
   function validateField(field, validationFn) {
     field.addEventListener('input', () => {

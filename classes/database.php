@@ -35,6 +35,13 @@ function isUsernameExists($username){
     $count = $stmt->fetchColumn();
     return $count > 0;
 }
+function isCourseExists($course_name){
+    $con = $this->opencon();
+    $stmt = $con->prepare("SELECT COUNT(*) FROM courses WHERE course_name= ?");
+    $stmt->execute([$course_name]);
+    $count = $stmt->fetchColumn();
+    return $count > 0;
+}
 
 function isEmailExists($email){
     $con = $this->opencon();
@@ -56,5 +63,40 @@ function loginUser($username, $password){
         return false;
     }
 }
+function addStudent($firstname ,$lastname, $email, $admin_id) { 
+        $con = $this->opencon();
+
+        try{
+    $con->beginTransaction();
+    $stmt = $con->prepare("INSERT INTO Students (student_FN, student_LN, student_email, admin_id) VALUES(?,?,?,?)");
+    $stmt->execute([$firstname, $lastname, $email, $admin_id]);
+    $userID = $con-> lastInsertId();
+    $con->commit();
+
+    return $userID;
+
+        }catch (PDOExecption $e){
+            $con->rollBack();
+            return false;
+        }
+    }
+    
+function addCourse($coursename, $admin_id) { 
+        $con = $this->opencon();
+
+        try{
+    $con->beginTransaction();
+    $stmt = $con->prepare("INSERT INTO Courses (course_name, admin_id) VALUES(?,?)");
+    $stmt->execute([$coursename, $admin_id]);
+    $userID = $con-> lastInsertId();
+    $con->commit();
+
+    return $userID;
+
+        }catch (PDOExecption $e){
+            $con->rollBack();
+            return false;
+        }
+    }
 }
 
